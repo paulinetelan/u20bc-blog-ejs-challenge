@@ -59,7 +59,24 @@ app.post("/compose", (req, res) => {
     content: req.body.contentText
   };
   posts.push(post);
+
   res.redirect("/");
+});
+
+app.get("/post/:title", (req, res) => {
+  const paramTitle = req.params.title;
+  var exists = false;
+  posts.forEach( (x) => {
+    if (x.title === paramTitle) {
+      exists = true;
+    }
+  });
+
+  if (exists) {
+    console.log("Match found!");
+  }else{
+    console.log("Not found!");
+  }
 });
 
 app.listen(3000, function() {
