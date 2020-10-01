@@ -3,7 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
-const _ = require("lodash");
+const lodash = require("lodash");
 
 const posts = [];
 
@@ -32,7 +32,8 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
   res.render("home", {
     startingContent: homeStartingContent,
-    posts: posts
+    posts: posts,
+    ld: lodash
   });
 })
 
@@ -65,13 +66,13 @@ app.post("/compose", (req, res) => {
 });
 
 app.get("/posts/:title", (req, res) => {
-  const paramTitle = _.lowerCase(req.params.title);
+  const paramTitle = lodash.lowerCase(req.params.title);
   let postTitle = "";
   let postContent = "";
 
   let exists = false;
   posts.forEach((x) => {
-    let title = _.lowerCase(x.title);
+    let title = lodash.lowerCase(x.title);
     if (title === paramTitle) {
       // save title and content for posts page
       postTitle = x.title;
