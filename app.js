@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const _ = require("lodash");
 
 const posts = [];
 
@@ -63,19 +64,32 @@ app.post("/compose", (req, res) => {
   res.redirect("/");
 });
 
-app.get("/post/:title", (req, res) => {
-  const paramTitle = req.params.title;
-  var exists = false;
-  posts.forEach( (x) => {
-    if (x.title === paramTitle) {
+app.get("/posts/:title", (req, res) => {
+  const paramTitle = _.lowerCase(req.params.title);
+  let postTitle = "";
+  let postContent = "";
+
+  let exists = false;
+  posts.forEach((x) => {
+    let title = _.lowerCase(x.title);
+    if (title === paramTitle) {
+      // save title and content for posts page
+      postTitle = x.title;
+      postContent = x.content;
       exists = true;
     }
   });
 
   if (exists) {
-    console.log("Match found!");
-  }else{
-    console.log("Not found!");
+    res.render("post", {
+      title: postTitle,
+      content: postContent
+    });
+  } else {
+    res.render("post", {
+      title: "Post not found!",
+      content: "Please enter a valid title."
+    });
   }
 });
 
